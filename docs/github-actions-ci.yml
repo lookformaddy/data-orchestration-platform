@@ -1,0 +1,21 @@
+# NOTE: this file lives at docs/github-actions-ci.yml by design.
+# Move it to .github/workflows/ci.yml after checkout to activate CI.
+# (The GitHub integration used to publish this repo rejects .github/workflows/ paths.)
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: PYTHONPATH=src python -m pytest -q
+      - run: PYTHONPATH=src python examples/run_demo.py
